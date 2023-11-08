@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhanQuyenAPI", "PhanQuyenAPI\PhanQuyenAPI.csproj", "{7004DDF1-23A6-45AD-99C5-A27102BFA29D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7004DDF1-23A6-45AD-99C5-A27102BFA29D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7004DDF1-23A6-45AD-99C5-A27102BFA29D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7004DDF1-23A6-45AD-99C5-A27102BFA29D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7004DDF1-23A6-45AD-99C5-A27102BFA29D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4CC4342-27F9-40D7-83F6-2DCAD5F25903}
+	EndGlobalSection
+EndGlobal

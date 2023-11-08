@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Đăng Nhập</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            width: 400px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px -10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Đăng Nhập</h2>
+
+        <form id="loginForm">
+            <input id="usernameInput" type="text" placeholder="Tên đăng nhập">
+            <input id="passwordInput" type="password" placeholder="Mật khẩu">
+            <input type="submit" value="Đăng Nhập">
+        </form>
+        <a id="forgotPasswordLink" href="quen-mat-khau.html">Quên mật khẩu</a>
+
+        <a id="signupLink" href="dang-ky.html">Đăng Ký</a>
+
+        <script>
+            var form = document.getElementById('loginForm');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                myf();
+            });
+
+            function myf() {
+                const username = document.getElementById('usernameInput').value;
+                const password = document.getElementById('passwordInput').value;
+                // Định nghĩa URL của API
+                const apiUrl = 'https://localhost:7281/api/Auth/login';
+
+                const loginData = {
+                    username: username,
+                    password: password,
+                    status: status
+                };
+
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData),
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            alert('Login failed')
+                            throw new Error('Login failed');
+                        }
+                    })
+                    .then(data => {
+                        const role = data.role.toLowerCase();
+                        const token = data.token; // Assuming the token is in a property called "Token"
+                        const status = data.status;
+                        if (status === 'Banned') {
+                            
+                            alert('Tài Khoản đã bị ban');
+                        }
+                        else {
+                            if (role === 'admin') {
+                                localStorage.setItem('jwtToken_admin', token);
+
+
+                                // Redirect to the admin page
+                                window.location.href = 'admin.html';
+                            } else {
+
+                                const userName = data.username; // Thay bằng giá trị thực tế
+                                localStorage.setItem('userName', userName);
+                                localStorage.setItem('jwtToken_user', token);
+                                // Redirect to the user page
+                                window.location.href = 'user.html';
+                            }
+                        }
+
+
+                        // You can save the token and use it for subsequent API requests.
+                    })
+                    .catch(error => {
+                        console.error('Login error:', error);
+                    });
+
+
+
+            }
+
+
+        </script>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<head>
+    <style>
+        #registrationForm {
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .res_success {
+            text-align:  center;
+            color: green;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<form id="registrationForm" action="process_registration.php" method="POST">
+    <label for="username">Tài khoản:</label>
+    <input id="username" type="text" name="username" required>
+
+    <label for="password">Mật khẩu:</label>
+    <input id="password" type="password" name="password" required>
+
+    <label for="confirmPassword">Xác nhận mật khẩu:</label>
+    <input id="confirmPassword" type="password" name="confirmPassword" required>
+
+    <input type="submit" value="Đăng Ký">
+    <a href="index.html">Back to Login</a>
+</form>
+    <div class="res_success">
+
+    </div>
+<script>
+    const apiUrl = 'https://localhost:7281/api/Auth/Register';
+    const registrationForm = document.getElementById('registrationForm');
+
+    registrationForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của biểu mẫu
+
+        // Lấy giá trị từ trường tài khoản
+        const username = registrationForm.elements.username.value;
+
+        // Lấy giá trị từ trường mật khẩu
+        const password = registrationForm.elements.password.value;
+
+        // Lấy giá trị từ trường xác nhận mật khẩu
+        const confirmPassword = registrationForm.elements.confirmPassword.value;
+
+        const registrationData = {
+            userName: username,
+            password: password,
+            confirmPassword: confirmPassword,
+        };
+
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(registrationData),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .then((data) => {
+                const res_success = document.querySelector(".res_success");
+                res_success.textContent = 'Registration successful';
+                console.log('Registration successful:', registrationData.userName, registrationData.password);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+
+
+
+</script>

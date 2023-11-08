@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>User Page</title>
+</head>
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+<body>
+    <h1></h1>
+    <script>
+        const token = localStorage.getItem('jwtToken_user');
+
+        if (!token) {
+            // Nếu không có token, chuyển hướng người dùng đến trang đăng nhập
+            window.location.href = 'index.html';
+        }
+        const h1 = document.querySelector('h1');
+
+    </script>
+    <div id="userContent">
+
+        <button id="changePasswordButton">Change Password</button>
+        <button id="changeStatusButton">Change Status</button>
+        <button id="logoutButton">Logout</button>
+    </div>
+    <form id="changePwForm" class="hidden">
+        <input id="usernameInput" type="text" placeholder="Tên đăng nhập">
+        <input id="passwordInput" type="password" placeholder="Mật khẩu cũ">
+        <input id="newPasswordInput" type="password" placeholder="Mật khẩu mới">
+        <input id="submit" type="submit">
+    </form>
+    <form id="changeSttForm" class="hidden">
+        <input type="radio" id="active" name="status" value="active">
+        <label for="active">Active</label><br>
+
+        <input type="radio" id="inactive" name="status" value="inactive">
+        <label for="inactive">Inactive</label><br>
+
+        <input type="radio" id="busy" name="status" value="busy">
+        <label for="busy">Busy</label><br>
+        <input id="submit" type="submit" value="Submit">
+
+    </form>
+    <script>
+        h1.textContent = `Welcome ${localStorage.getItem('userName')} !`;
+        const changePasswordButton = document.getElementById('changePasswordButton');
+        const changePwForm = document.getElementById('changePwForm');
+        const changeSttForm = document.getElementById('changeSttForm');
+
+        const usernameInput = document.getElementById('usernameInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const newPasswordInput = document.getElementById('newPasswordInput');
+
+        // Sự kiện khi người dùng nhấn nút "Change Password"
+        changePasswordButton.addEventListener('click', function () {
+            changePwForm.classList.toggle('hidden');
+        });
+
+        changePwForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+            const newPassword = newPasswordInput.value;
+
+            // Định nghĩa URL của API
+            const apiUrl = 'https://localhost:7281/api/Auth/ChangePassword';
+
+            const changePwData = {
+                Username: username,
+                Oldpassword: password,
+                NewPassword: newPassword,
+            };
+            fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(changePwData),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Change password failed');
+                    }
+                })
+                .then(data => {
+
+
+
+                    console.log("Đổi mât khẩu thành công!"); // In thông tin phản hồi từ máy chủ
+                    
+                })
+                .catch(error => {
+                    console.error('Change password error:', error);
+                });
+        });
+
+
+        changeStatusButton.addEventListener('click', function () {
+            changeSttForm.classList.toggle('hidden');
+        });
+
+        changeSttForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const activeRadio = document.querySelector('input[name="status"]:checked[value="active"]');
+            const inactiveRadio = document.querySelector('input[name="status"]:checked[value="inactive"]');
+            const busyRadio = document.querySelector('input[name="status"]:checked[value="busy"]');
+
+            let newStatus;
+
+            if (activeRadio) {
+                newStatus = "active";
+            } else if (inactiveRadio) {
+                newStatus = "inactive";
+            } else if (busyRadio) {
+                newStatus = "busy";
+            } else {
+                return;
+            }
+            // Định nghĩa URL của API
+            console.log(newStatus);
+
+
+
+            const changeSttData = {
+                Username: localStorage.getItem('userName'),
+                Status: newStatus
+            };
+            fetch('https://localhost:7281/api/Auth/ChangeStt', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(changeSttData),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                })
+                .then(data => {
+
+
+
+                    console.log("Đổi status thành công!");
+                })
+                .catch(error => {
+                    console.error('Change Stt error:', error);
+                });
+        });
+
+        logoutButton.addEventListener('click', function () {
+            localStorage.removeItem('jwtToken_user');
+
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+
+</html>
